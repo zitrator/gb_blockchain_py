@@ -1,3 +1,4 @@
+import codecs
 import hashlib
 
 # Что нужно сделать:
@@ -20,7 +21,7 @@ pk1 = [['\xfb5\xadY', '\xa5\xb6Q&'], ['sP\x88\xe9', '\xb1\xdaj\x9c'], ['W\x7f3$'
        ['\x93%\x9f\\', '\xcd\x97\xd5k'], ['\xc6\x9ao{', '\xff\xb2\x1bm'], ['c\xb9C\x9f', '\xd9\xaa\x7f0'],
        ['\xf6\xad\xb0r', 'p\xfe\xe8\r'], ['v\x83z\xe4', 'sr\x08\xdf'], ['S\xe7U\x1b', '!m\xbe2'],
        ['\xdcy\x9a%', '\xe2\xbev%'], ['?^@n', ']\t\x1f\xca']]
-message1 = b'Privet!!!'
+message1 = 'Privet!!!'
 signature1 = '?\xad\xa8Z\xa3\xf3,\xfa\xdf@@ _\x8d\x9dO8\xc1\xf7\xf2\x15\xa9\x89\xb8\x92\x98q+P\x9e\x04\xf6\x05\xc7\xc0~\xab\xd4\xfdq!L\xce}\x18#DJ\x11\x0b"\x9c@\xdcQ\x9f\x9b\xe0\xac7\xa6\xe9\x91w\xc4\x94\xeb>\xab\xfa\x8e\xc0S\x93JH9\xc2\x93\xbcI\x0e=:\x98\xaf\xe9\x93\xcb\xe0\xf4mU\xdf\x8d\x9b\xd7\xa7\xe1\x0czVkpN\x14\x0e\x92\xf4\x07\x0b\xb7\x16\xd4<p\x92G9#\x02\xedI\xf4w\x9f\x1aq'
 
 pk2 = [['\xfb5\xadY', '\xa5\xb6Q&'], ['sP\x88\xe9', '\xb1\xdaj\x9c'], ['W\x7f3$', '\xb5\xca}\x14'],
@@ -34,7 +35,7 @@ pk2 = [['\xfb5\xadY', '\xa5\xb6Q&'], ['sP\x88\xe9', '\xb1\xdaj\x9c'], ['W\x7f3$'
        ['\x93%\x9f\\', '\xcd\x97\xd5k'], ['\xc6\x9ao{', '\xff\xb2\x1bm'], ['c\xb9C\x9f', '\xd9\xaa\x7f0'],
        ['\xf6\xad\xb0r', 'p\xfe\xe8\r'], ['v\x83z\xe4', 'sr\x08\xdf'], ['S\xe7U\x1b', '!m\xbe2'],
        ['\xdcy\x9a%', '\xe2\xbev%'], ['?^@n', ']\t\x1f\xca']]
-message2 = b'Hello!!!'
+message2 = 'Hello!!!'
 signature2 = '\xe0/\xcc"h\xdc>\xc0R\x0f6c/\x88\x00\xbb\xfa\xc3\xdd\x99w\x15\xc37%\xb9\xe8\xcb\xa3\xbab\xf2\x8c\xdd\x95$\xdf\x01\x8ba\'\xe9\xe0T\x82 \xa5\xe8\x9cs\xfaC_xr\xca\xedK\x03\xbb\xb0\x9a\xd77\xf3u\xf0;\xbf+\x0e\xff\xa6\xf8?F\xdc\x94\xe6\xf4\xefc\x8e\xd14\x9b<\x94q\x97\xb7M\x1c&r58\x8d^2\xaa\xc1\xac\xdd\x04\xe7z|$I2\xa9\xce\x81\xccU\xd8\xaa\xfa\xc8$\x1f\x1bM\x99[\x19\x11'
 
 pk3 = [['\xe3+\xbf\xec', 'm\xb42\xea'], ['\xa2\xb8AY', 'N\xd3\x17^'], ['\xc2\xb2\x0c\xa8', 's\xde\xcdE'],
@@ -48,35 +49,37 @@ pk3 = [['\xe3+\xbf\xec', 'm\xb42\xea'], ['\xa2\xb8AY', 'N\xd3\x17^'], ['\xc2\xb2
        ['\x83\xe4\x1a2', '^\xb9:F'], ['\x13\xb1t.', '\x9a.]\xb6'], ['d\xdf\x0e\xd5', 'v\xf8\xe3\xac'],
        ['\x84\xc4*U', '\xb6I\xc3\xe2'], ['G\xff\xbf\xca', '\xf8;\x8fc'], ['\x91 \xcf\x00', '/D\x0eB'],
        ['\x7fK\xd5j', '~\x15rk'], ['\xb0\xd9\xf8\xac', '\xd3\xaet5']]
-message3 = b'Blockchain!'
+message3 = 'Blockchain!'
 signature3 = '\xad\x9e9i\x82jM\x86 UP72\x0b\xc1w\xb1\x08\x8a$q\xe1\xf4\x17\x19\xb0\xa0n\xe46\x19\xbd\xc6\xeb\xad\xe8d\xc0\xfdPZ\x14\x01\n\xaf\x8a\x18UP\xaf>"\xe3\x906?\xc2T\xe5\x08\x86j\xbau\xfd\xe2\xd0w\xf0\x14Q\xf8\x04}T\x81uz*s\xda\x99\xc4">5\xb3\xc0\x8f\x81\x18\xe4\xbe\x06=2\xde!\x17\xaf&\xd8\xf0\xdb\xf1|D\x1f\x14\xa2\x8c\xd5\x86\xaf\x1f\x89\x08\xac\x96\x00w\x1d\xb9\xceq\x04\x88D'
 
 
 # binary string
-def bstr(n): # n in range 0-255
+def bstr(n):  # n in range 0-255
     return ''.join([str(n >> x & 1) for x in (7, 6, 5, 4, 3, 2, 1, 0)])
 
 
-def make_signature(msg, pk):
-    hash_msg = hashlib.sha1(msg).digest()[:4]
-    print(bstr(hash_msg[0]) + ' ' + bstr(hash_msg[1]) + ' ' + bstr(hash_msg[2]) + ' ' + bstr(hash_msg[3]))
-    sig = ''
+def check_signature(msg, pk, signature):
+    hash_msg = hashlib.sha1(msg.encode()).digest()[:4]
     for i in (0, 1, 2, 3):
         for j in (0, 1, 2, 3, 4, 5, 6, 7):
-            if hash_msg[i] << j & 128:
-                sig = sig + pk[i * 8 + j][1]
+            pos = i * 8 + j
+            hash_sk = hashlib.sha1(signature[pos:pos+4].encode()).digest()[:4]
+            if (hash_msg[i] << j & 128) != 0:
+                if pk[pos][1] != hash_sk:
+                    return False
             else:
-                sig = sig + pk[i * 8 + j][0]
-    return sig
+                if pk[pos][0] != hash_sk:
+                    return False
+    return True
 
 
 def task_three():
-    sig = make_signature(message1, pk1)
-    print(sig == signature1)
-    sig = make_signature(message2, pk2)
-    print(sig == signature1)
-    sig = make_signature(message3, pk3)
-    print(sig == signature1)
+    sig = check_signature(message1, pk1, signature1)
+    print(sig)
+    sig = check_signature(message2, pk2, signature2)
+    print(sig)
+    sig = check_signature(message3, pk3, signature3)
+    print(sig)
 
 
 if __name__ == '__main__':
